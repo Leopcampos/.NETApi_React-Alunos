@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9ZOsjDPCl0qvgRJHlBEmYUf1z2VUWTGwZ3LddgiN5dkgI22WBOWsbPxhqArp9v0DXGuPKEqubJ9zNa6XH1gBXg==",
+  "dgSpecHash": "5qjT8ZmPZ5HtZRFhV2liNoS1v1Ymh7zVk3Xi4ckKEbcKeM2NXiq3SOWxxX1CLRBtCxORglnLzhXRe6W4Jmbt2w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\LPCAMPOS\\Downloads\\Dev\\REACT\\AlunosApi\\AlunosApi\\AlunosApi.csproj",
+  "projectFilePath": "C:\\Users\\LPCAMPOS\\Downloads\\Dev\\REACT\\AlunosAPI_FullStack\\Backend\\AlunosApi\\AlunosApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LPCAMPOS\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\LPCAMPOS\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",

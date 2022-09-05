@@ -1,30 +1,26 @@
-import React, {useState, useEffect} from 'react';
-
+import React, { useState, useEffect } from 'react';
 import './App.css';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import axios from 'axios';
-
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-// import logoCadastro from '.assets/cadastro.png';
+import logoCadastro from './assets/cadastro.png';
 
 function App() {
   const baseUrl = "https://localhost:44373/api/alunos";
 
   const [data, setData] = useState([]);
 
-  const pedidoGet = async() =>{
+  const pedidoGet = async () => {
     await axios.get(baseUrl)
-    .then(response =>{
-      setData(response.data);
-    }).catch(error =>{
-      console.log(error);
-    })
+      .then(response => {
+        setData(response.data);
+      }).catch(error => {
+        console.log(error);
+      })
   }
 
-  useEffect(() =>
-   {pedidoGet();
+  useEffect(() => {
+    pedidoGet();
   })
 
   return (
@@ -32,8 +28,10 @@ function App() {
       <br />
       <h3>Cadastro de Alunos</h3>
       <header>
-        {/* <img src={logoCadastro} alt="Cadastro" /> */}
+        <div className='aline-cadastro'>
+        <img className='img' src={logoCadastro} alt="Cadastro" />
         <button className="btn btn-success">Incluir Novo Aluno</button>
+        </div>
       </header>
       <table className="table table-bordered">
         <thead>
@@ -46,7 +44,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {data.map(aluno =>(
+          {data.map(aluno => (
             <tr key={aluno.id}>
               <td>{aluno.id}</td>
               <td>{aluno.nome}</td>
