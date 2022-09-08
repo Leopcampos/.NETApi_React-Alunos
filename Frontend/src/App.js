@@ -11,6 +11,8 @@ function App() {
   const [data, setData] = useState([]);
   const [modalIncluir, setModalIncluir] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
+  const [modalExcluir, setModalExcluir] = useState(false);
+  const [updateData, setUpdateData] = useState(true);
 
   const [alunoSelecionado, setAlunoSelecionado] = useState({
     id: '',
@@ -25,6 +27,10 @@ function App() {
 
   const abrirFecharModalEditar = () => {
     setModalEditar(!modalEditar);
+  }
+
+  const abrirFecharModalExcluir = () => {
+    setModalExcluir(!modalExcluir);
   }
 
   const handleChange = e => {
@@ -74,14 +80,29 @@ function App() {
       })
   }
 
+  const pedidoDelete = async () => {
+    await axios.delete(baseUrl + "/" + alunoSelecionado.id)
+      .then(response => {
+        setData(data.filter(aluno => aluno.id !== response.data));
+        abrirFecharModalExcluir();
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
   const selecionarAluno = (aluno, opcao) => {
     setAlunoSelecionado(aluno);
-    (opcao === "Editart") && abrirFecharModalEditar();
+    (opcao === "Editart") ?
+      abrirFecharModalEditar() : abrirFecharModalExcluir();
   }
 
   useEffect(() => {
-    pedidoGet();
-  })
+
+    if (updateData) {
+      pedidoGet();
+      setUpdateData(false);
+    }
+  }, [updateData]);
 
   return (
     <div className="aluno-container">
@@ -146,27 +167,34 @@ function App() {
         <ModalHeader>Incluir Alunos</ModalHeader>
         <ModalBody>
           <div className="form-group">
-            <label>Nome</label>
-            <label>ID:</label>
-            <br />readOnly value={alunoSelecionado && alunoSelecionado.id}
             <br />
             <label>Nome:</label>
-            <input type="text" className="form-control" name="nome" onChange={handleChange} 
-            value={alunoSelecionado && alunoSelecionado.nome}/><br/>
+            <input type="text" className="form-control" name="nome" onChange={handleChange}
+              value={alunoSelecionado && alunoSelecionado.nome} /><br />
             <br />
             <label>Email</label>
             <br />
-            <input type="text" className="form-control" name="email" onChange={handleChange} 
-            value={alunoSelecionado && alunoSelecionado.email}/>  <br/>
+            <input type="text" className="form-control" name="email" onChange={handleChange}
+              value={alunoSelecionado && alunoSelecionado.email} />  <br />
             <label>Idade</label>
             <br />
-            <input type="text" className="form-control" name="idade" onChange={handleChange} 
-            value={alunoSelecionado && alunoSelecionado.idade}/><br/>
+            <input type="text" className="form-control" name="idade" onChange={handleChange}
+              value={alunoSelecionado && alunoSelecionado.idade} /><br />
           </div>
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-primary" onClick={() => pedidoPut()}>Editar</button>{" "}
           <button className="btn btn-danger" onClick={() => abrirFecharModalEditar()}>Cancelar</button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={modalExcluir}>
+        <ModalBody>
+          Confrima a exclusão deste(a) aluno(a) : {alunoSelecionado && alunoSelecionado.nome}
+        </ModalBody>
+        <ModalFooter>
+          <button className="btn btn-danger" onClick={() => pedidoDelete()}>Sim</button>
+          <botton className="btn btn-primary" onClick={() => abrirFecharModalExcluir()}>Não</botton>
         </ModalFooter>
       </Modal>
     </div>
