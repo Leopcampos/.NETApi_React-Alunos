@@ -11,6 +11,8 @@ namespace AlunosApi.ViewModels
 
         [Required]
         [DataType(DataType.Password)]
+        [StringLength(20, ErrorMessage = "O {0} deve ter no mínimo {2} e no máximo {1} caracteres.",
+            MinimumLength = 8)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
