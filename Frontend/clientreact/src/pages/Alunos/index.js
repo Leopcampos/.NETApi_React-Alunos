@@ -1,19 +1,55 @@
-import React from "react";
-import './styles.css';
-import logoCadadstro from '../../assets/cadastro.png';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FiEdit, FiUserX, FiXCircle } from 'react-icons/fi';
+import './styles.css';
+
+import logoCadadstro from '../../assets/cadastro.png';
+import api from '../../services/api';
+
 
 export default function Alunos() {
+
+    const[nome, setNome] = useState('');
+     const [alunos, setAlunos] = useState([]);
+
+     const email = localStorage.getItem('email');
+     const token = localStorage.getItem('token');
+   
+     const authorization = {
+         headers : {
+           Authorization : `Bearer ${token}`
+         }
+     }
+
+     const navigate = useNavigate();
+
+    useEffect( ()=> {
+        api.get('api/alunos',authorization).then(
+          response=> {setAlunos(response.data);
+         }, token)
+      })
+
+      async function logout(){
+        try{
+            localStorage.clear();
+            localStorage.setItem('token','');
+            authorization.headers = '';
+            navigate('/');
+        }
+        catch(err){
+            alert("Não foi possível realizar o logout" + err);
+        }
+      }
+
     return (
         <div className="aluno-container">
             <header>
                 <img src={logoCadadstro} alt="Cadastro" />
-                <span>Bem-Vindo, <strong>Leonardo</strong>!</span>
+                <span>Bem-Vindo, <strong>{email}!</strong>!</span>
                 <Link className="button" to="/aluno/novo/0">Novo Aluno</Link>
-                <button type="button">
-                    x
-                    {/* <FiXCircle size={35} color="#17202a" /> */}
+                <button onClick={logout} type="button">
+                    
+                    <FiXCircle size="35" color="#17202a" />
                 </button>
             </header>
             <form>
@@ -22,30 +58,24 @@ export default function Alunos() {
                     Filtrar aluno por nome (parcial)
                 </button>
             </form>
+
             <h1>Relação de Alunos</h1>
             <ul>
-                <li>
-                    <b>Nome:</b> Paulo<br /><br />
-                    <b>Email:</b> paulo@email.com<br /><br />
-                    <b>Idade:</b> 22<br /><br />
-                    <button type="button">
-                        <FiEdit size={25} color="#17202a" />
-                    </button>
-                    <button type="button">
-                        <FiUserX size={25} color="#17202a" />
-                    </button>
-                </li>
-                <li>
-                    <b>Nome:</b> Cícero<br /><br />
-                    <b>Email:</b> cicero@email.com<br /><br />
-                    <b>Idade:</b> 50<br /><br />
-                    <button type="button">
-                        <FiEdit size={25} color="#17202a" />
-                    </button>
-                    <button type="button">
-                        <FiUserX size={25} color="#17202a" />
-                    </button>
-                </li>
+                {alunos.map(aluno => (
+                    <li key={aluno.id}>
+                        <b>Nome:</b>{aluno.nome}<br /><br />
+                        <b>Email:</b>{aluno.email}<br /><br />
+                        <b>Idade:</b>{aluno.idade}<br /><br />
+
+                        <button type="button">
+                            <FiEdit size="25" color="#17202a" />
+                        </button>
+
+                        <button type="button" >
+                            <FiUserX size="25" color="#17202a" />
+                        </button>
+                    </li>
+                ))}
             </ul>
         </div>
     );
